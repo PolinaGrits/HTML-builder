@@ -5,14 +5,17 @@ const path = require('path');
 const pathDirIn = path.join(__dirname, 'files');
 const pathDirOut = path.join(__dirname, 'files-copy');
 
+
 fs.access(pathDirOut, (err) => {
   if (err) {
-    copyFiles();
+    copyFiles(); //если папки нет - создаем;
     console.log('\nFolder copied\n');
   } else {
-    createDir();
-    copyFiles();
-    console.log('\nFiles updated\n');
+    fs.rm(pathDirOut, { recursive: true }, (err) => { //папка зачищается и копируются новые файлы
+      if (err) throw err;
+      copyFiles();
+      console.log('\nFiles updated\n');
+    }); 
   }
 });
 
